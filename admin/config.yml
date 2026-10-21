@@ -1,0 +1,74 @@
+# Panel de administración de Propiedades Nava (Decap CMS)
+backend:
+  name: github
+  repo: propiedadesnava-art/propiedadesnava
+  branch: main
+  commit_messages:
+    create: "Nueva propiedad {{slug}}"
+    update: "Actualiza {{slug}}"
+    delete: "Elimina {{slug}}"
+    uploadMedia: "Sube foto {{path}}"
+    deleteMedia: "Borra foto {{path}}"
+
+locale: es
+site_url: https://propiedadesnava.cl
+display_url: https://propiedadesnava.cl
+media_folder: fotos
+public_folder: /fotos
+
+collections:
+  - name: propiedades
+    label: Propiedades
+    label_singular: Propiedad
+    description: "Cada propiedad tiene un código único (PN-001, PN-002…). Al guardar, la página se actualiza en 1 o 2 minutos."
+    folder: data/propiedades
+    format: json
+    extension: json
+    create: true
+    delete: true
+    identifier_field: titulo
+    slug: "pn-{{codigo}}"
+    summary: "PN-{{codigo}} · {{titulo}} · {{operacion}}"
+    sortable_fields: ["codigo", "titulo"]
+    fields:
+      - {label: "Código (solo el número)", name: codigo, widget: number, value_type: int, min: 1, hint: "Usa el siguiente número libre. Ej: si la última es PN-005, escribe 6."}
+      - {label: "Título", name: titulo, widget: string, hint: "Ej: Casa con piscina en Colina"}
+      - {label: "Publicada", name: publicada, widget: boolean, default: true, hint: "Desmárcalo para ocultarla de la página sin borrarla."}
+      - {label: "Operación", name: operacion, widget: select, options: ["Venta", "Arriendo"], default: "Venta"}
+      - {label: "Tipo", name: tipo, widget: select, options: ["Casa", "Departamento", "Terreno", "Parcela", "Oficina", "Local comercial", "Bodega"], default: "Casa"}
+      - {label: "Estado", name: estado, widget: select, options: ["Disponible", "Reservada", "Vendida", "Arrendada"], default: "Disponible"}
+      - {label: "Destacada en la portada", name: destacada, widget: boolean, default: false}
+      - {label: "Moneda del precio", name: moneda, widget: select, options: ["CLP", "UF"], default: "CLP", hint: "La página siempre muestra UF arriba y pesos abajo."}
+      - {label: "Precio", name: precio, widget: number, value_type: float, required: false, hint: "Sin puntos. Ej: 200000000. Deja 0 para mostrar 'Precio a consultar'."}
+      - {label: "Comuna", name: comuna, widget: string, required: false}
+      - {label: "Sector o barrio", name: sector, widget: string, required: false}
+      - {label: "Dirección (no se muestra, solo para el mapa)", name: direccion, widget: string, required: false}
+      - {label: "Coordenadas para el mapa", name: coordenadas, widget: string, required: false, hint: "En Google Maps mantén presionado el punto exacto y copia los números. Ej: -33.4372, -70.6506"}
+      - {label: "Dormitorios", name: dormitorios, widget: number, value_type: int, required: false, default: 0}
+      - {label: "Baños", name: banos, widget: number, value_type: int, required: false, default: 0}
+      - {label: "Estacionamientos", name: estac, widget: number, value_type: int, required: false, default: 0}
+      - {label: "m² útiles", name: m2utiles, widget: number, value_type: float, required: false, default: 0}
+      - {label: "m² de terreno", name: m2terreno, widget: number, value_type: float, required: false, default: 0}
+      - {label: "Descripción", name: descripcion, widget: text, required: false}
+      - {label: "Características", name: caracteristicas, widget: list, required: false, field: {label: "Característica", name: item, widget: string}}
+      - {label: "Fotos (la primera es la portada)", name: fotos, widget: list, required: false, field: {label: "Foto", name: foto, widget: image}}
+
+  - name: ajustes
+    label: Ajustes del sitio
+    files:
+      - name: config
+        label: Contacto, portada e historia
+        file: data/config.json
+        fields:
+          - {label: "WhatsApp", name: whatsapp, widget: string, hint: "Ej: +56 9 7898 3134"}
+          - {label: "Teléfono", name: telefono, widget: string, required: false}
+          - {label: "Correo", name: email, widget: string, required: false}
+          - {label: "Instagram (usuario)", name: instagram, widget: string, required: false, hint: "Ej: @propiedadesnava"}
+          - {label: "Facebook (usuario o enlace)", name: facebook, widget: string, required: false}
+          - {label: "Zona donde trabajas", name: zona, widget: string, required: false}
+          - {label: "Título de portada", name: heroTitulo, widget: string}
+          - {label: "Texto de portada", name: heroTexto, widget: text, required: false}
+          - {label: "Título de 'Nuestra historia'", name: historiaTitulo, widget: string, required: false}
+          - {label: "Texto de 'Nuestra historia'", name: historiaTexto, widget: text, required: false}
+          - {label: "Valor de la UF en pesos", name: valorUF, widget: number, value_type: float, hint: "Actualízalo una vez al mes (sii.cl)."}
+          - {label: "Fecha de ese valor", name: fechaUF, widget: string, required: false}
